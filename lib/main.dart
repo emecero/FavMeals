@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-import './categories_screen.dart';
+import 'screens/categories_screen.dart';
+import 'package:favmeals/screens/meal_detail_screen.dart';
+import 'package:favmeals/screens/category_meals_screen.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'favMeals',
       theme: ThemeData(
         primarySwatch: Colors.amber,
@@ -21,6 +25,19 @@ class MyApp extends StatelessWidget {
         )
       ),
       home: CategoriesScreen(),
+      routes: {
+        CategoryMealsScreen.routName : (ctx) => CategoryMealsScreen(),
+        MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+      },
+      // Crear una ruta 404 cuando no se encuentre una pantalla a donde mandarlo
+      onGenerateRoute: (settings){
+        print(settings.arguments);
+        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+      },
+      //cuando flutter falla en mostrar una pag que se va mostrar 404
+      onUnknownRoute: (settings){
+        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+      },
     );
   }
 }
