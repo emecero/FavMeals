@@ -1,3 +1,5 @@
+import 'package:favmeals/screens/settings_screen.dart';
+import 'package:favmeals/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/categories_screen.dart';
@@ -24,10 +26,13 @@ class MyApp extends StatelessWidget {
           headline6: TextStyle(fontFamily: 'RobotoCondensed', fontSize: 20) 
         )
       ),
-      home: CategoriesScreen(),
+     // home: TabScreen(),
+     initialRoute: '/',
       routes: {
+        '/': (ctx) => TabScreen(),
         CategoryMealsScreen.routName : (ctx) => CategoryMealsScreen(),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+        SettingsScreen.routeName: (ctx) => SettingsScreen(),
       },
       // Crear una ruta 404 cuando no se encuentre una pantalla a donde mandarlo
       onGenerateRoute: (settings){
