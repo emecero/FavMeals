@@ -81,7 +81,15 @@ Widget buildContainer(Widget child){
               ))
           ]
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        child:Icon(
+          Icons.delete
+          ),
+          onPressed: () {
+          Navigator.of(context).pop(mealId);
+        },
+        ),
       );
   }
 }

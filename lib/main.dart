@@ -1,14 +1,53 @@
-import 'package:favmeals/screens/settings_screen.dart';
-import 'package:favmeals/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'package:favmeals/dummy_data.dart';
+import 'package:favmeals/models/meal.dart';
+import 'package:favmeals/screens/settings_screen.dart';
+import 'package:favmeals/screens/tabs_screen.dart';
 import 'screens/categories_screen.dart';
 import 'package:favmeals/screens/meal_detail_screen.dart';
 import 'package:favmeals/screens/category_meals_screen.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  Map<String, bool> _settings = {
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false,
+  };
+
+  List<Meal> _availableMeals = DUMMY_MEALS;
+
+  void _setFilters(Map<String, bool> filterData) {
+    setState(() {
+      _settings = filterData;
+
+      _availableMeals = DUMMY_MEALS.where((meal){
+        if (_settings['gluten'] && !meal.isGlutenFree){
+          return false;
+        }
+        if (_settings['lactose'] && !meal.isLactoseFree){
+          return false;
+        }
+        if (_settings['vegan'] && !meal.isVegan){
+          return false;
+        }
+       if (_settings['vegetarian'] && !meal.isVegetarian){
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -30,9 +69,9 @@ class MyApp extends StatelessWidget {
      initialRoute: '/',
       routes: {
         '/': (ctx) => TabScreen(),
-        CategoryMealsScreen.routName : (ctx) => CategoryMealsScreen(),
+        CategoryMealsScreen.routName : (ctx) => CategoryMealsScreen(_availableMeals),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        SettingsScreen.routeName: (ctx) => SettingsScreen(),
+        SettingsScreen.routeName: (ctx) => SettingsScreen(_settings, _setFilters),
       },
       // Crear una ruta 404 cuando no se encuentre una pantalla a donde mandarlo
       onGenerateRoute: (settings){
